@@ -28,6 +28,7 @@ const IncendioHogar = () => {
 	const { state } = useLocation();
 	const estado = state;
 	const titulo = 'Cotiza tu ' + estado[0].nombreSeguro;
+	const [rut, setRut] = useState("")
 
 	const [ datos, setDatos ] = useState({
 		nombreDuenno: '',
@@ -148,8 +149,11 @@ const IncendioHogar = () => {
 	const enviarDatos = (event) => {
 		console.log('enviando datos...' + datos.nombreDuenno + ' ' + datos.rutDueno + ' ' + datos.telefono);
 		console.log('rut', validate(format(datos.rutDueno)));
+         
 		
-	
+		 if( validate(format(datos.rutDueno))){
+		
+	     console.log("Se valido")
 
 		axios
 			.post(`${process.env.REACT_APP_API_URL}/formulario-incendios`, {
@@ -178,6 +182,13 @@ const IncendioHogar = () => {
 			.catch(function(error) {
 				console.log(error);
 			});
+			
+			
+		}else{
+			console.log("no es validado")
+			setRut("Rut invalida")
+		}
+		
 	};
 
 	return (
@@ -262,22 +273,22 @@ const IncendioHogar = () => {
 												<div className="form-group">
 													<InputStyled
 														placeholder="Rut"
-														type="Number"
+														type="text"
 														name="rutDueno"
 														onChange={handleInputChange}
 														className="form-control"
 														
 														ref={register({
 															required: {
-																value: format(datos.rutDueno),
+																value: validate(format(datos.rutDueno)),
 																message: 'RUT obligatorio'
 															},
 															minLength: {
-																value: 9,
+																value: 8,
 																message: 'RUT invalido'
 															},
 														     maxLength: {
-																value: 9,
+																value: 13,
 																message: 'RUT invalido'
 															}
 				
@@ -285,9 +296,16 @@ const IncendioHogar = () => {
 													/>
 													{errors.rutDueno && (
 														<span className="text-danger text-small d-block mb-2">
+														 
+	
 															{errors.rutDueno.message}
+														 
 														</span>
 													)}
+												   <div className="text-danger text-small d-block mb-2">{rut}</div>
+														
+															
+													
 												</div>
 											</div>
 											{/* 
@@ -354,6 +372,7 @@ const IncendioHogar = () => {
 														<span className="text-danger text-small d-block mb-2">
 															{errors.comuna.message}
 														</span>
+													
 													)}
 												</div>
 											</div>

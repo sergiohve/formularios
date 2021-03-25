@@ -47,7 +47,7 @@ const Vehiculos = () => {
     const { state } = useLocation();
     const estado = state;
     const titulo = 'Cotiza tu '+estado[0].nombreSeguro
-
+    const [rut1, setRut] = useState("")
     const [datos, setDatos] = useState({
         nombre: '',
         rut: '',
@@ -173,7 +173,9 @@ const Vehiculos = () => {
 
 
 
-
+        if(validate(format(datos.rut))){
+		
+            console.log("Se valido")
 
         axios.post(`${process.env.REACT_APP_API_URL}/formulario-vehiculos`, {
             nombre: datos.nombre,
@@ -203,14 +205,17 @@ const Vehiculos = () => {
             console.log(error);
           });
 
-         
+        }else{
+            console.log("no es validado")
+            setRut("Rut invalida")
+          }
 
 
     }
 
 
 
-    const [{ formattedValue }, setRut] = useRut();
+    
     const [value, setValue] = useState()
 
     const notify = () => toast.success(' Datos enviados correctamente!!', {
@@ -309,7 +314,7 @@ const Vehiculos = () => {
 												<div className="col-12 col-lg-6">
 													<div className="form-group">
                                                         <InputStyled placeholder="Rut" 
-                                                        type="Number" 
+                                                        type="text" 
                                                         name="rut"
                                                         onChange={ handleInputChange } 
                                                         className="form-control"
@@ -319,11 +324,11 @@ const Vehiculos = () => {
                                                                 message: 'RUT obligatorio'
                                                             },
                                                             minLength: {
-                                                                value: 9,
+                                                                value: 8,
                                                                 message: 'RUT invalido'
                                                             },
                                                              maxLength: {
-                                                                value: 9,
+                                                                value: 12,
                                                                 message: 'RUT invalido'
                                                             }
                 
@@ -332,6 +337,7 @@ const Vehiculos = () => {
                                                           {
                                                             errors.rut && <span className="text-danger text-small d-block mb-2">{errors.rut.message}</span>
                                                         }
+                                                         <div className="text-danger text-small d-block mb-2">{rut1}</div>
                                                         
 													</div>
 												</div>

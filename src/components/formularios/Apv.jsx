@@ -35,7 +35,7 @@ const Apv = () => {
     const { state } = useLocation();
     const estado = state;
     const titulo = 'Cotiza tu '+estado[0].nombreSeguro
-    
+    const [rut1, setRut] = useState("")
     const [datos, setDatos] = useState({
         nombre: '',
         edad: '',
@@ -83,8 +83,11 @@ const Apv = () => {
     const enviarDatos = (event) => {
        
         console.log('enviando datos...' + datos.nombre + ' ' + datos.mail + ' ' + datos.telefono)
-        console.log('rut', validate(format(datos.rutDueno)));
-
+        console.log('rut', validate(format(datos.rut)));
+       
+        if( validate(format(datos.rut))){
+		
+            console.log("Se valido")
 
         axios.post(`${process.env.REACT_APP_API_URL}/apvs`, {
 
@@ -109,6 +112,10 @@ const Apv = () => {
           .catch(function (error) {
             console.log(error);
           });
+        }else{
+			console.log("no es validado")
+			setRut("Rut invalida")
+		}
 
 
     }
@@ -302,6 +309,7 @@ const Apv = () => {
                                                  {
                                                     errors.rut && <span className="text-danger text-small d-block mb-2">{errors.rut.message}</span>
                                                   }
+                                                   <div className="text-danger text-small d-block mb-2">{rut1}</div>
 													</div>
 												</div>
                                                 <div className="col-12 col-lg-6">
